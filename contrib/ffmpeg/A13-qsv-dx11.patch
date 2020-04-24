@@ -1,3 +1,22 @@
+From 465bfdb7a393819b023ffc79b50efd1827bb26a9 Mon Sep 17 00:00:00 2001
+From: Artem Galin <artem.galin@gmail.com>
+Date: Sat, 29 Feb 2020 12:31:23 +0000
+Subject: [PATCH] qsv: hw decoding improvements
+
+---
+ fftools/ffmpeg_opt.c          |  12 +-
+ libavcodec/qsv.c              |  69 ++++++++--
+ libavcodec/qsv_internal.h     |   9 ++
+ libavcodec/qsvdec.c           | 184 ++++++++++++++-------------
+ libavcodec/qsvdec.h           |   2 +
+ libavcodec/qsvdec_h2645.c     |   1 +
+ libavcodec/qsvdec_other.c     |   1 +
+ libavfilter/qsvvpp.c          |  36 ++++--
+ libavutil/hwcontext_d3d11va.c |  56 +++++++-
+ libavutil/hwcontext_qsv.c     | 233 ++++++++++++++++++++++++++++------
+ libavutil/hwcontext_qsv.h     |  11 +-
+ 11 files changed, 462 insertions(+), 152 deletions(-)
+
 diff --git a/fftools/ffmpeg_opt.c b/fftools/ffmpeg_opt.c
 index f5ca18aa64..75d9b5669b 100644
 --- a/fftools/ffmpeg_opt.c
@@ -1061,3 +1080,6 @@ index b98d611cfc..d21d58eb61 100644
  } AVQSVFramesContext;
  
  #endif /* AVUTIL_HWCONTEXT_QSV_H */
+-- 
+2.17.1
+

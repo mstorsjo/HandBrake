@@ -1,27 +1,40 @@
+From 53b69d5f33c939a2221f85fea624256eb1a80431 Mon Sep 17 00:00:00 2001
+From: Damiano Galassi <damiog@gmail.com>
+Date: Thu, 15 Nov 2018 13:56:16 +0100
+Subject: [PATCH] videotoolboxenc: Handle a few more color primaries,
+ initialize has_b_frames for HEVC
+
+---
+ libavcodec/videotoolboxenc.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
 diff --git a/libavcodec/videotoolboxenc.c b/libavcodec/videotoolboxenc.c
-index 7796a68..e8b6245 100644
+index ff33c279c3..4551b548ea 100644
 --- a/libavcodec/videotoolboxenc.c
 +++ b/libavcodec/videotoolboxenc.c
-@@ -866,6 +866,14 @@ static int get_cv_color_primaries(AVCodecContext *avctx,
+@@ -877,6 +877,14 @@ static int get_cv_color_primaries(AVCodecContext *avctx,
              *primaries = NULL;
              break;
  
 +        case AVCOL_PRI_BT470BG:
-+			*primaries = kCVImageBufferColorPrimaries_EBU_3213;
++            *primaries = kCVImageBufferColorPrimaries_EBU_3213;
 +            break;
 +
 +        case AVCOL_PRI_SMPTE170M:
-+			*primaries = kCVImageBufferColorPrimaries_SMPTE_C;
++            *primaries = kCVImageBufferColorPrimaries_SMPTE_C;
 +            break;
 +
          case AVCOL_PRI_BT709:
              *primaries = kCVImageBufferColorPrimaries_ITU_R_709_2;
              break;
-@@ -1302,6 +1310,7 @@ static av_cold int vtenc_init(AVCodecContext *avctx)
+@@ -1313,6 +1321,7 @@ static int vtenc_configure_encoder(AVCodecContext *avctx)
          vtctx->get_param_set_func = compat_keys.CMVideoFormatDescriptionGetHEVCParameterSetAtIndex;
          if (!vtctx->get_param_set_func) return AVERROR(EINVAL);
          if (!get_vt_hevc_profile_level(avctx, &profile_level)) return AVERROR(EINVAL);
 +        vtctx->has_b_frames = avctx->max_b_frames > 0;
      }
  
-     vtctx->session = NULL;
+     enc_info = CFDictionaryCreateMutable(
+-- 
+2.17.1
+
