@@ -1804,6 +1804,11 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
             hb_dict_remove(video_dict, "Quality");
         }
     }
+    if ((value = hb_dict_get(preset, "VideoHWDecode")) != NULL)
+    {
+        hb_dict_set(video_dict, "HWDecode",
+                    hb_value_xform(value, HB_VALUE_TYPE_BOOL));
+    }
     qsv = hb_dict_get(video_dict, "QSV");
     if (qsv == NULL)
     {

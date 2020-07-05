@@ -201,6 +201,7 @@ static uint64_t min_title_duration = 10;
 static int      qsv_async_depth    = -1;
 static int      qsv_decode         = -1;
 #endif
+static int      hw_decode          = -1;
 
 /* Exit cleanly on Ctrl-C */
 static volatile hb_error_code done_error = HB_ERROR_NONE;
@@ -1471,6 +1472,9 @@ static void ShowHelp()
 "                           timing if it's below that rate.\n"
 "                           If none of these flags are given, the default\n"
 "                           is --pfr when -r is given and --vfr otherwise\n"
+"   --enable-hw-decoding    Force hardware decoding of the video track\n"
+"   --disable-hw-decoding   Disable hardware decoding of the video track,\n"
+"                           forcing software decoding instead\n"
 "\n"
 "\n"
 "Audio Options ----------------------------------------------------------------\n"
@@ -2193,6 +2197,8 @@ static int ParseOptions( int argc, char ** argv )
             { "disable-qsv-decoding", no_argument,       &qsv_decode, 0,                  },
             { "enable-qsv-decoding",  no_argument,       &qsv_decode, 1,                  },
 #endif
+            { "disable-hw-decoding", no_argument,        &hw_decode, 0, },
+            { "enable-hw-decoding",  no_argument,        &hw_decode, 1, },
 
             { "format",      required_argument, NULL,    'f' },
             { "input",       required_argument, NULL,    'i' },
@@ -4217,6 +4223,10 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         hb_dict_set(preset, "VideoQSVDecode", hb_value_int(qsv_decode));
     }
 #endif
+    if (hw_decode != -1)
+    {
+        hb_dict_set(preset, "VideoHWDecode", hb_value_int(hw_decode));
+    }
     if (maxWidth > 0)
     {
         hb_dict_set(preset, "PictureWidth", hb_value_int(maxWidth));
